@@ -1,8 +1,12 @@
-# Recipe_Generator
+## Original repository: https://github.com/Vidya-GM/Recipe_Generator
+
+# Culinary Cloud
 ## 🧠🍽️ AI-Powered Recipe Generator (Django + OpenAI)
 
-Generate personalized recipes along with image just by telling the app what ingredients you have!  
-This AI-powered Django app uses the OpenAI API to craft complete recipes—optionally filtered by cuisine, cook time, difficulty, or other preferences.  
+Generate personalized recipes along with image just by telling the app what ingredients you have!
+
+This AI-powered Django app uses the OpenAI API to craft complete recipes—optionally filtered by cuisine, cook time, difficulty, or other preferences.
+
 The app also allows user interactions like likes, comments, and notifications.
 
 ---
