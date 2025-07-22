@@ -1,0 +1,1578 @@
+/* static/css/main.css */
+
+/* Reset & Base – now with a full‐page background */
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, sans-serif;
+  min-height: 100vh;
+  /* Background image behind everything, tiled or sized */
+  background:
+    url("../images/bg-pattern.jpg") repeat center top,
+    #f7fafc;            /* fallback color */
+  background-size: auto; /* or `cover` if you want one full‐screen image */
+  color: #333;
+  background-repeat: repeat-y, repeat-y;
+  background-position: center top, center 100vh;
+  background-size: cover, cover;
+}
+
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.page-wrapper > main {
+  flex: 1;
+}
+
+/* Main Navigation Bar with Brand + Background */
+.site-nav {
+  display: flex;
+  align-items: center;
+  /* your SVG/jpg background + white fallback */
+  background:
+    url("../images/nav-bg.jpg") no-repeat center/cover,
+    #ffffff;
+  border-bottom: 1px solid #ccc;
+  padding: 0.5rem 1rem;
+}
+
+/* Your project name on the left */
+.site-nav .site-title {
+  margin-right: auto;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-decoration: none;
+  /* White text */
+  color: #fff;
+}
+
+/* All the other nav links */
+.site-nav a {
+  margin: 0 0.75rem;
+  color: #333;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/*Notification*/
+.notification-badge {
+  background-color: red;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: bold;
+  vertical-align: middle;
+  margin-left: 4px;
+  display: inline-block;
+  min-width: 18px;
+  text-align: center;
+  vertical-align: top; /* Or middle depending on layout */
+  line-height: 1;
+}
+
+/* Grid container (home page) */
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem;
+}
+
+
+
+
+
+
+/* ====================================================================
+   1) ORIGINAL GRID & CARD STYLING
+   ==================================================================== */
+
+/* Recipe grid */
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem;
+}
+
+/* Recipe card (front face) */
+.recipe-card {
+  position: relative;           /* keep for flip */
+  perspective: 1000px;          /* keep for flip */
+  overflow: hidden;             /* keep for flip */
+
+
+  transform-style: preserve-3d;
+
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.1),
+    0 1px 2px rgba(0, 0, 0, 0.06);
+  padding: 1rem;
+  text-decoration: none;
+  color: inherit;
+
+  display: flex;
+  flex-direction: column;
+
+  min-height: 240px;
+
+  transition:
+    transform 0.6s cubic-bezier(0.175,0.885,0.32,1.275),
+    box-shadow 0.6s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+
+.recipe-card:hover {
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.06);
+  transform: scale(1.05);
+}
+
+.recipe-card .card-front img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+}
+
+.recipe-card h2 {
+  margin: 0.5rem 0 0.25rem;
+  font-size: 1.125rem;
+}
+
+.recipe-card p {
+  flex-grow: 1;
+  color: #555;
+  font-size: 0.875rem;
+  margin: 0.5rem 0;
+}
+
+.recipe-card .stats {
+  margin-top: auto;
+  /* margin-top: 0.5rem; */
+  font-size: 0.875rem;
+  color: #777;
+  display: flex;
+  gap: 1rem;
+}
+
+/* ====================================================================
+   2) NEW: FLIP-OVERLAY STYLING
+   ==================================================================== */
+
+/* Hide the “front” on hover */
+.recipe-card .card-front {
+  flex: 1;                    /* fill all the space in the card */
+  display: flex;
+  flex-direction: column;
+
+  transition:
+    opacity 0.6s cubic-bezier(0.175,0.885,0.32,1.275),
+    transform 0.6s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+.recipe-card:hover .card-front {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.recipe-card__overlay {
+  position: absolute;
+  top: 100%; left: 0;
+  width: 100%;
+  height: 90%;
+  padding: 1rem;
+
+  background: #fff;        /* solid white so text is sharp */
+
+  box-sizing: border-box;
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  transform: translateY(0); /* start off‐screen below */
+  opacity: 0;
+  /* transition: transform 0.6s ease, opacity 0.6s ease; */
+  transition: transform 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+
+
+.recipe-card:hover .recipe-card__overlay {
+  transform: translateY(-100%);  /* slide up into view */
+  opacity: 1;
+}
+
+
+
+
+.recipe-card__overlay .card__title {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.recipe-card__overlay .card__description {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.4;
+}
+
+
+
+.recipe-card__avatar {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  z-index: 10;
+}
+
+
+
+
+
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+.pagination a {
+  padding: 0.5rem 1rem;
+  background: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #333;
+}
+
+/* ───────── Recipe Detail Layout ───────── */
+.recipe-detail-container {
+  /* 1) Let it span the full width up to a max */
+  width: 100%;
+  max-width: 1500px;        /* whatever maximum you like */
+  
+  /* 2) Center it and give it equal side‐padding */
+  margin: 2rem 0rem 0rem 9rem;
+  padding: 0 2rem;          /* 2rem on left & right gutters */
+  
+  /* 3) Your existing grid setup */
+  display: grid;
+  grid-template-columns: 40% 60%;  /* or 1fr 1fr */
+  gap: 3rem;                       /* your desired gutter */
+}
+@media (max-width: 700px) {
+  .recipe-detail-container {
+    grid-template-columns: 1fr;
+    width: calc(100% - 2rem);
+  }
+}
+
+/* Left: Image */
+.recipe-detail-image {
+  display: flex;
+  justify-content: center;
+}
+.recipe-detail-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 30px;
+  object-fit: cover;
+}
+
+/* ───────── Right: Info panel ───────── */
+.recipe-detail-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 30px;
+  box-shadow:
+    0 1px 3px rgba(0,0,0,0.1),
+    0 1px 2px rgba(0,0,0,0.06);
+  padding: 1.5rem;
+}
+
+/* ───────── Base pill styling ───────── */
+.pill {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  margin: 0.2rem 0.4rem;
+  background-color: #f0f0f0;
+  color: #333;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+.pill:hover,
+.pill:focus {
+  background-color: #e5e5e5;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* ───────── Title & Description Pills ───────── */
+.detail-title-pill,
+.detail-desc-pill {
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+}
+.detail-title-pill {
+  font-size: 1.5rem;
+  font-weight: 600;
+  background: #fafafa;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.detail-desc-pill {
+  color: #555;
+  background: #fafafa;
+}
+
+/* ───────── Ingredients + Meta row ───────── */
+.detail-details {
+  background: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+}
+.ingredients-section {
+  flex: 2;
+}
+.ingredients-section h3 {
+  margin-top: 0;
+}
+.ingredients-section ul {
+  margin: 0.5rem 0 0 1rem;
+}
+.meta-pills {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+.meta-pills .pill {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 9999px;
+  text-align: center;
+}
+
+
+/* Make the owner pill a little inline-flex box */
+.owner-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Tweak the image inside it */
+.owner-pill .owner-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+
+/* ───────── Instructions block ───────── */
+.detail-instructions {
+  background: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 1rem;
+}
+.detail-instructions h3 {
+  margin-top: 0;
+}
+.detail-instructions ol {
+  margin: 0.5rem 0 0 1.5rem;
+}
+
+
+/* Footer: Comments & Like */
+.recipe-detail-footer {
+  display: flex;
+  justify-content: space-between;   /* space them out horizontally */
+  align-items: flex-start;          /* don’t stretch them vertically */
+  gap: 1rem;
+  
+  /* constrain to the same max-width as your main container */
+  width: calc(100% - 4rem);
+  max-width: 1200px;                /* tweak to your design’s max width */
+  margin: 2rem auto;                /* center it and give vertical breathing room */
+}
+
+/* Comments panel stays fluid */
+.comments-section {
+  flex: 1;                          /* fill remaining space */
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 1rem;
+}
+
+/* Like panel no longer stretches */
+.like-section {
+  flex: 0 0 auto;                   /* auto width, no grow or shrink */
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0.5rem;
+  text-align: center;
+  
+  /* Optional: give a fixed width so it stays neat */
+  width: 80px;                      /* or whatever fits your icon/text */
+}
+
+/* ─── Like Section Compact Styling ─── */
+
+.like-section {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0.5rem;
+  max-width: 160px;         /* shrink the block */
+  text-align: center;
+}
+
+.like-form {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btn-like {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+.btn-like:active {
+  transform: scale(1.2);
+}
+
+.like-count {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-left: 0.5rem;
+}
+
+/* Link for non-authenticated users */
+.like-login {
+  display: inline-block;
+  font-size: 0.9rem;
+  color: #3182ce;
+  text-decoration: none;
+}
+.like-login:hover {
+  text-decoration: underline;
+}
+
+
+/* Back link at bottom */
+.detail-back {
+  text-align: center;
+  margin: 2rem 0;
+}
+.back-btn {
+  display: inline-block;
+  padding: 0.5rem 1.5rem;
+  background: #e53e3e;
+  color: white;
+  border-radius: 9999px;
+  text-decoration: none;
+  font-weight: 600;
+}
+.back-btn:hover {
+  background: #c53030;
+}
+
+
+/* ───────── Interaction Block (Comments + Like) ───────── */
+.interaction-block {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+
+  /* MATCH the two-column container exactly: */
+  width: calc(100% - 4rem);
+  max-width: 1510px;        /* use whatever max-width your detail container uses */
+  margin: 3rem auto;        /* center it under the columns */
+}
+/* header: “Write a comment” + like button */
+.interaction-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+.interaction-header label {
+  font-weight: 600;
+}
+/* Wrap the heart, “Likes:” label and count */
+.like-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  background-color: #e3f2fd;   /* light blue, tweak as you like */
+  border-radius: 9999px;
+  border: 1px solid #90caf9;   /* slightly darker blue border */
+}
+/* The heart button */
+.btn-like {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.1s ease;
+}
+.btn-like:active {
+  transform: scale(1.2);
+}
+
+/* Static “Likes:” text */
+.like-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* The actual count */
+.like-count {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* the fixed‐height textarea */
+.comment-block textarea {
+  resize: none;
+  height: 120px;
+  max-height: 120px;
+  min-height: 120px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: inherit;
+}
+.comment-block .btn {
+  margin-top: 0.5rem;
+}
+
+/* list of existing comments */
+.comments-list {
+  margin-top: 1rem;
+}
+.comment-box {
+  background: #fff;
+  border-left: 3px solid #ccc;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+}
+.comment-meta {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.5rem;
+}
+
+.comments-list .comment-box p {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   Modern “Generate a Recipe” Page Styles
+   ─────────────────────────────────────────────────────────────── */
+
+/* ------------- Wrapper & Page Title ------------- */
+
+.generate-container {
+  max-width: 1200px;            /* limit how wide the form can grow */
+  margin: 2rem auto;            /* center horizontally with vertical spacing */
+  padding: 2rem 1rem;           /* horizontal padding on narrow screens */
+  background: #ffffff;          /* white background for the entire card */
+  border: 1px solid #ddd;       /* light gray border */
+  border-radius: 8px;           /* rounded corners */
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.generate-container .page-title {
+  margin: 0 0 1.5rem;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  color: #2d3748;               /* dark gray/charcoal */
+}
+
+/* ------------- Fieldset (Form Section) ------------- */
+
+.form-section {
+  background: #fafafa;                    /* subtle off‐white background */
+  border: 1px solid #e2e8f0;              /* very light gray‐blue border */
+  border-radius: 8px;                     /* more rounded corners */
+  padding: 1.5rem 2rem;                   /* extra internal breathing room */
+  margin-bottom: 2rem;                    /* space between fieldsets */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* faint shadow to lift the entire section */
+  position: relative;
+}
+
+.form-section legend {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2d3748;
+  padding: 0 0.5rem;   /* offset from the border */
+  margin-left: 1rem;   /* shift legend text in from left edge */
+  background: #fafafa; /* matches fieldset background */
+}
+
+/* ------------- Ingredient Categories Wrapper ------------- */
+
+.ingredient-category-wrapper {
+  display: flex;
+  flex-wrap: nowrap;       /* keep all categories on one row */
+  justify-content: space-between;
+  gap: 1%;                 /* small gutter between cards */
+  margin-top: 1rem;        /* space under legend */
+}
+
+/* ------------- Individual Category “Card” ------------- */
+
+.ingredient-category {
+  flex: 0 0 19%;           /* ~19% width, so 5 cards + gaps ≈ 100% */
+  background: #ffffff;     /* white “card” background */
+  border-radius: 8px;      /* rounded corners */
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.04);
+  padding: 1rem;           /* inner padding */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease;
+}
+
+.ingredient-category:hover {
+  transform: translateY(-3px); /* slight lift on hover */
+}
+
+/* ------------- Category Title Inside Card ------------- */
+
+.ingredient-category .category-title {
+  margin: 0 0 0.75rem;           /* breathing room below title */
+  font-size: 1.125rem;           /* slightly larger text */
+  font-weight: 600;              /* semibold for emphasis */
+  color: #2d3748;                /* dark gray */
+  border-bottom: 1px solid #e2e8f0;  /* subtle underline */
+  padding-bottom: 0.25rem;       /* space between text and underline */
+}
+
+/* ------------- Grid of Checkboxes Inside Each Card ------------- */
+
+.ingredient-category .ingredients-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 0.75rem;             /* slightly larger gap between items */
+  margin-top: 0.25rem;      /* small gap under category title */
+  flex-grow: 1;             /* allow grid to expand if needed */
+}
+
+/* ------------- Individual Checkbox Label ------------- */
+
+.ingredient-category .checkbox-label {
+  display: flex;
+  align-items: center;
+  background: #f7fafc;      /* very light gray-blue */
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  width: 100%;              /* fill the card’s width */
+  box-sizing: border-box;
+}
+
+.ingredient-category .checkbox-label:hover {
+  background: #84d2ff;      /* slightly darker on hover */
+  border-color: #cbd5e0;
+}
+
+.ingredient-category .checkbox-label input[type="checkbox"] {
+  margin-right: 0.5rem;
+  transform: scale(1.1);
+}
+
+/* ------------- Additional Details: Two‐Column Form Rows ------------- */
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;                 /* space between columns */
+  margin-top: 1rem;          /* breathing room under previous element */
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #2d3748;
+  margin-bottom: 0.5rem;
+}
+
+.generate-form select,
+.generate-form textarea,
+.generate-form input[type="text"],
+.generate-form input[type="number"] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  font-size: 1rem;
+  color: #2d3748;
+  background: #f7fafc;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.generate-form select:focus,
+.generate-form textarea:focus,
+.generate-form input[type="text"]:focus,
+.generate-form input[type="number"]:focus {
+  outline: none;
+  border-color: #3182ce;           /* blue outline on focus */
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.2);
+}
+
+.generate-form textarea {
+  min-height: 120px;
+  resize: vertical;    /* allow vertical resizing */
+}
+
+/* ------------- Form Action Buttons ------------- */
+
+.form-actions {
+  display: flex;
+  justify-content: center;   /* center both buttons */
+  gap: 10rem;                  /* small gap between them */
+  margin-top: 1.5rem;         /* keep some breathing room above */
+}
+
+/* Make each button a bit narrower so they sit neatly */
+.form-actions .btn {
+  min-width: 140px; /* or whatever feels right */
+}
+
+.form-actions .btn {
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.form-actions .btn.btn-secondary {
+  background: #edf2f7;         /* light gray‐blue background */
+  color: #4a5568;              /* dark gray text */
+  border: 1px solid #cbd5e0;   /* subtle border */
+}
+
+.form-actions .btn.btn-secondary:hover {
+  background: #e2e8f0;
+  transform: translateY(-2px);
+}
+
+.form-actions .btn.btn-primary {
+  background: #3182ce;         /* brand‐blue background */
+  color: #ffffff;              /* white text */
+  border: 1px solid #3182ce;
+}
+
+.form-actions .btn.btn-primary:hover {
+  background: #2b6cb0;         /* slightly darker blue on hover */
+  transform: translateY(-2px);
+}
+
+/* Disable resizing and lock in a fixed height for the manual‐ingredients textarea */
+.generate-form textarea {
+  resize: none;         /* turn off the drag‐to‐resize handle */
+  height: 120px;        /* pick whatever fixed height you prefer */
+  max-height: 120px;    /* prevent it from growing taller */
+  min-height: 120px;    /* prevent it from shrinking shorter */
+  width: 100%;          /* remain full-width of its container */
+  box-sizing: border-box;
+}
+
+
+/* ------------- Responsive Adjustments ------------- */
+
+@media (max-width: 1024px) {
+  .ingredient-category-wrapper {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .ingredient-category {
+    flex: 1 1 100%;
+  }
+}
+
+@media (max-width: 700px) {
+  .generate-container {
+    max-width: calc(100% - 2rem);
+    margin: 1rem auto;
+    padding: 1rem;
+  }
+  .form-row {
+    display: flex;
+    flex-direction: column;
+  }
+  .form-group {
+    width: 100%;
+  }
+  .form-actions {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .form-actions .btn {
+    width: 100%;
+  }
+}
+
+
+
+/* --------- Home Page Styling --------- */
+
+.home-hero {
+  width: calc(100% - 4rem);
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  /* put the image behind your white “card” */
+  background:
+    url("../images/bg-pattern.jpg") no-repeat center/cover,
+    #ffffff;  /* fallback color */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow:
+    0 1px 3px rgba(0,0,0,0.1),
+    0 1px 2px rgba(0,0,0,0.06);
+}
+
+.home-hero h1 {
+  margin: 0 0 1rem;
+  font-size: 2.5rem;
+  color: #333;
+}
+
+.home-hero p {
+  margin: 0 0 1.5rem;
+  font-size: 1.125rem;
+  color: #555;
+}
+
+.home-cta {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.home-cta .btn-primary,
+.home-cta .btn-secondary {
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.home-cta .btn-primary {
+  background: #333;
+  color: #fff;
+  border: none;
+}
+
+.home-cta .btn-secondary {
+  background: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
+.home-cta .btn-primary:hover,
+.home-cta .btn-secondary:hover {
+  opacity: 0.9;
+}
+
+.home-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  width: calc(100% - 4rem);
+  max-width: 1000px;
+  margin: 2rem auto;
+}
+
+.home-features .feature {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow:
+    0 1px 3px rgba(0,0,0,0.1),
+    0 1px 2px rgba(0,0,0,0.06);
+}
+
+.home-features .feature h2 {
+  /* reserve room for up to two lines */
+  min-height: 3rem;
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.home-features .feature p {
+  margin: 0.5rem 0 0;
+  line-height: 1.5;
+  font-size: 0.95rem;
+  color: #555;
+  flex-grow: 1; /* pins any footer/content to the bottom */
+}
+
+/* Responsive stacking */
+@media (max-width: 700px) {
+  .home-features {
+    width: calc(100% - 2rem);
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+/* ---------- Uiverse Cube Loader ---------- */
+.loading-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.692);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* From Uiverse.io by KSAplay */ 
+.loader {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.simple-text {
+  position: absolute;
+  top: -100px;
+  color: white;
+  width: 200px;
+  text-align: center;
+}
+
+.cube {
+  position: absolute;
+  width: 40px;
+  transform-style: preserve-3d;
+  transform: rotateX(-30deg) rotateY(45deg);
+  transition: 300ms ease;
+  cursor: pointer;
+  animation: rotateCube 10s infinite linear;
+}
+/* change the distance between cubes with translateX */
+.cube-front,
+.cube-back {
+  transform: translateX(40px) translateZ(-20px);
+  animation: none;
+}
+/* change the distance between cubes with translateZ */
+.cube-top,
+.cube-bottom {
+  transform: translateZ(20px);
+  animation: none;
+}
+/* change the distance between cubes with translateX */
+.cube-left,
+.cube-right {
+  transform: translateX(40px) translateZ(-20px);
+  animation: none;
+}
+
+.face {
+  position: absolute;
+  transform-style: preserve-3d;
+  width: 40px;
+  height: 40px;
+  background: rgb(21, 46, 75);
+  background: radial-gradient(
+    circle,
+    rgba(21, 46, 75, 1) 0%,
+    rgba(10, 14, 55, 1) 100%
+  );
+}
+
+.front {
+  transform: rotateY(0deg) translateZ(20px);
+}
+
+.back {
+  transform: rotateY(180deg) translateZ(20px);
+}
+
+.left {
+  transform: rotateY(-90deg) translateZ(20px);
+}
+
+.right {
+  transform: rotateY(90deg) translateZ(20px);
+}
+
+.top {
+  transform: rotateX(90deg) translateZ(20px);
+}
+
+.bottom {
+  transform: rotateX(-90deg) translateZ(20px);
+}
+
+.cube-back:hover .face,
+.cube-front:hover .face,
+.cube-top:hover .face,
+.cube-bottom:hover .face,
+.cube-left:hover .face,
+.cube-right:hover .face {
+  background: rgb(255, 255, 255);
+  background: radial-gradient(circle, white 60%, rgb(157, 208, 255) 100%);
+  filter: drop-shadow(0px 0px 5px #e7faff)
+    drop-shadow(0px 0px 15px rgb(75, 168, 255))
+    drop-shadow(0px 0px 30px rgb(50, 156, 255));
+}
+
+.cube:active {
+  transform: translateX(0px) translateZ(-20px);
+}
+
+.cube-back:active .face,
+.cube-front:active .face,
+.cube-top:active .face,
+.cube-bottom:active .face,
+.cube-left:active .face,
+.cube-right:active .face {
+  background: rgb(255, 255, 255);
+  background: radial-gradient(circle, white 60%, rgb(157, 208, 255) 100%);
+  filter: drop-shadow(0px 0px 5px #e7faff)
+    drop-shadow(0px 0px 15px rgb(75, 168, 255))
+    drop-shadow(0px 0px 30px rgb(50, 156, 255));
+}
+
+.middle {
+  background: transparent;
+}
+
+@keyframes rotateCube {
+  0% {
+    transform: rotateX(-30deg) rotateY(45deg);
+  }
+  100% {
+    transform: rotateX(-30deg) rotateY(405deg);
+  }
+}
+
+
+/* Comments display */
+.comment-meta {
+    font-family: 'Roboto Mono', monospace;
+    margin-top: 5px;
+    color: #493939;
+    font-size: 0.9em;
+    font-style: italic;
+}
+
+.comment-box {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-left: 3px solid #ccc;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+.comment-box:target {
+    animation: fadeHighlight 3s ease-in-out forwards;
+    outline: 2px solid #ffce00;
+}
+
+@keyframes fadeHighlight {
+    0%   { background-color: #e2e1d5; }
+    100% { background-color: transparent; }
+}
+
+/* -------------------------Style for recipe-User----- -------------------------- */
+/* -----------------------------recipe-User-Profile -------------------------- */
+/* Profile box */
+
+.profile-box {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
+}
+.profile-box h2 {
+    margin-top: 0;
+    text-align: center;
+}
+.profile-box p {
+    line-height: 1.6;
+}
+
+/* -----------------------------recipe-User-Login -------------------------- */
+/* Main form container */
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: calc(100vh - 60px); /* Adjust based on your navbar height */
+    padding-top: 40px;
+    background-color: #f5f5f5;
+}
+
+/* Form box styling */
+.form-box {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+    position: relative;  /* needed if z-index used */
+    z-index: 5;
+}
+
+/* Form elements */
+.form-box form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-box input[type="text"],
+.form-box input[type="email"],
+.form-box input[type="password"] {
+    padding: 10px;
+    margin-bottom: 7px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-box button {
+    padding: 10px 20px;
+    background-color: #197cb6;         /* Green color */
+    border: none;
+    color: white;
+    border-radius: 7px;
+    font-size: 19px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-box button:hover {
+    background-color: #072647;
+}
+
+/* -----------------------------recipe-User-Registration -------------------------- */
+
+.registration-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
+}
+.registration-box h2 {
+    margin-top: 0;
+    text-align: center;
+}
+.registration-box p {
+    line-height: 1.6;
+}
+
+.registration-box button {
+    padding: 10px 20px;
+    background-color: #2981b4;         /* Green color */
+    border: none;
+    color: white;
+    border-radius: 7px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.registration-box button:hover {
+    background-color: #072647;
+}
+
+
+
+/* ─────────────────────────────────────────────────────────────────
+   1) Marquee Container (viewport)
+   –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––─ */
+.marquee-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 180px;      /* must match your .marquee-card height */
+  margin: 2rem auto;
+  /* no background here—transparent edges will show whatever’s behind */
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   2) Apply a mask on the container so the ends fade to transparent
+   –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––─ */
+.marquee-container {
+
+  mask-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0)   0px,                    /* start fully transparent at left edge */
+    rgba(0, 0, 0, 0)   100px,                  /* remain transparent until 100px */
+    rgba(0, 0, 0, 1)   200px,                  /* at 200px, switch to fully opaque */
+    rgba(0, 0, 0, 1)   calc(100% - 200px),     /* stay opaque until 200px from right edge */
+    rgba(0, 0, 0, 0)   calc(100% - 100px),     /* fade back to transparent over next 100px */
+    rgba(0, 0, 0, 0)   100%                    /* remain transparent at far right edge */
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0)   0px,                    
+    rgba(0, 0, 0, 0)   100px,                 
+    rgba(0, 0, 0, 1)   200px,                 
+    rgba(0, 0, 0, 1)   calc(100% - 200px),    
+    rgba(0, 0, 0, 0)   calc(100% - 100px),    
+    rgba(0, 0, 0, 0)   100%                   
+  );
+  mask-size: 100% 100%;       /* apply mask across entire width/height */
+  -webkit-mask-size: 100% 100%; 
+}
+
+
+/* ─────────────────────────────────────────────────────────────────
+   3) Marquee Track (inline-block, no wrapping)
+   –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––─ */
+.marquee-track {
+  display: inline-block;
+  white-space: nowrap;               /* one continuous line */
+  animation: marquee-scroll 70s linear infinite;
+  position: relative;
+  z-index: 1;                        /* beneath the container’s mask */
+}
+
+/* To reverse direction on a second marquee: */
+.marquee-track--reverse {
+  animation-direction: reverse;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   4) Individual Card inside the track
+   –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––─ */
+.marquee-card {
+  display: inline-block;
+  vertical-align: top;
+  width: 240px;           /* card width */
+  height: 180px;          /* card height */
+  margin-right: 0.5rem;   /* gap between cards */
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.marquee-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   5) Keyframes: shift track left by 50% of its own width
+   –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––─ */
+@keyframes marquee-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+
+
+
+/* Enhanced search bar styling */
+.search-bar {
+  display: flex;
+  justify-content: center;
+  margin: 1rem auto;
+  width: 100%;
+  max-width: 450px;
+  margin-left: 44rem;
+}
+
+.search-bar input[type="text"] {
+  flex: 1;
+  padding: 0.75rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px 0 0 8px;
+  font-size: 0.9rem;
+  outline: none;
+  transition: box-shadow 0.3s ease;
+}
+
+.search-bar button {
+  padding: 0.5rem 0.9rem;
+  background-color: rgb(9, 144, 197);
+  color: white;
+  border: none;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.search-bar button:hover {
+  background-color: #555;
+}
+
+
+.search-sort-container {
+  display: flex;
+  justify-content: center; /* keeps content centered */
+  align-items: center;
+  flex-wrap: wrap; /* allows stacking on small screens */
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.sort-form {
+  width: 215px; /* half of search bar */
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-right: 3rem;
+}
+
+.sort-form select {
+  padding: 0.5rem 0.5rem;
+  border: none;
+  font-size: 0.9rem;
+  outline: none;
+  flex: 1 1 auto; /* flexible */
+  cursor: pointer;
+  background-color: white;
+  border-radius: 8px 0 0 8px;
+  min-width: 0; /* allow shrinking */
+}
+
+.sort-form button {
+  padding: 0.5rem 0.9rem; /* wider padding for button */
+  min-width: 60px; /* fix min width so button doesn't get too small */
+  background-color: rgb(9, 144, 197);
+  color: white;
+  border: none;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  border-radius: 0 8px 8px 0;
+}
+
+.sort-form button:hover {
+  background-color: #555;
+}
+
+
+
+
+
+
+/* Enhanced like button styling */
+
+.btn-like {
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    border-radius: 5px;
+}
+
+/* Quick scale effect when button is pressed */
+.btn-like:active {
+    transform: scale(1.3);
+    transition: transform 0.1s ease;
+}
+
+/* Pulse animation for liked button */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        color: #e0245e;
+    }
+    50% {
+        transform: scale(1.1);
+        color: #ff6584;
+    }
+}
+
+.btn-danger.pulse {
+    animation: pulse 1.5s infinite;
+}
+
+/* Styling for buttons */
+.btn-danger {
+    color: #e0245e;
+    border: none;
+    background: transparent;
+}
+
+.btn-outline-danger {
+    color: #e0245e;
+    background: transparent;
+    border: 2px solid #e0245e;
+}
+
+
+
+/* Enhanced my profile styling */
+/* Smooth fade-in animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.profile-box {
+    max-width: 600px;
+    margin: 2rem auto;
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    text-align: center;
+    animation: fadeIn 0.6s ease-in-out;
+    transition: box-shadow 0.3s ease;
+}
+
+.profile-box:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Profile image hover scale effect */
+.profile-box img {
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.profile-box img:hover {
+    transform: scale(1.05);
+}
+
+/* Button hover effect */
+.profile-box a {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.6rem 1.2rem;
+    background-color: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.profile-box a:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+
+/* ───────────────────────────────────────────────────────────────
+  Footer Styles
+   ─────────────────────────────────────────────────────────────── */
+
+.site-footer {
+  text-align: center;
+  padding: 1rem 0;
+
+}
+.site-footer .footer-content {
+  display: inline-flex;
+  gap: 1rem;
+  align-items: center;
+}
+.site-footer a {
+  color: #161616;
+  text-decoration: none;
+}
+.site-footer a:hover {
+  text-decoration: underline;
+}

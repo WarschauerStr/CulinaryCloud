@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert -{{ message.tags }}" style="text-align: center;">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% endif %}
+    <!-- css for box -->
+    <div class="form-container">
+        <div class="form-box">
+            <h2>Culinary Cloud - Login</h2> 
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">login</button>
+            </form>
+            <br>
+
+            <div class="signup-cta">
+                Don't have an account? <a href="{% url 'register' %}">Sign up</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
